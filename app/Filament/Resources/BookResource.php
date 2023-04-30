@@ -3,9 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BookResource\Pages;
-use App\Filament\Resources\BookResource\RelationManagers;
 use App\Models\Book;
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -15,15 +13,14 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Str;
 
 class BookResource extends Resource
 {
     protected static ?string $model = Book::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     public static function form(Form $form): Form
     {
@@ -34,8 +31,12 @@ class BookResource extends Resource
                     ->reactive()
                     ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')->required(),
+                Select::make('category_id')
+                    ->relationship('category', 'title'),
                 TextInput::make('author')->required(),
-                RichEditor::make('description')->required(),
+                RichEditor::make('description')
+                    ->columnSpan('full')
+                    ->required(),
                 Select::make('rating')
                     ->options([1, 2, 3, 4, 5]),
                 FileUpload::make('cover')
@@ -49,6 +50,12 @@ class BookResource extends Resource
         return $table
             ->columns([
                 ImageColumn::make('cover')
+                    ->width(100)
+                    ->height('auto'),
+                TextColumn::make('title'),
+                TextColumn::make('author'),
+                TextColumn::make('category.title')
+
             ])
             ->filters([
                 //
