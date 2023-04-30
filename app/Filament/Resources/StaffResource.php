@@ -4,11 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\StaffResource\Pages;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
 class StaffResource extends Resource
@@ -59,11 +62,25 @@ class StaffResource extends Resource
             ]);
     }
 
+    public static function can(string $action, ?Model $record = null): bool
+    {
+        if (!Filament::auth()->user()->hasRole('admin')) {
+            return false;
+        }
+
+        return parent::can($action, $record);
+    }
+
     public static function getRelations(): array
     {
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->whereRelation('roles', 'name', 'staff');
     }
 
     public static function getPages(): array
