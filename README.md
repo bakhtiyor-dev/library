@@ -6,19 +6,23 @@ ___
 
 2. ``cd library``
 
-3. setup your .env (environment configurations)
+3. ``composer install`` && ``php artisan key:generate``
 
-4. ``php artisan migrate``
+4. copy .env.example to .env and setup your environment configurations
 
-5. ``php artisan db:seed``
+5. ``php artisan migrate``
 
-6. ``npm install && vite``
+6. ``php artisan db:seed``
 
-7. ``php artisan serve``
+7. ``npm install && vite``
 
-8. setup queue and mail
+8. ``php artisan serve``
 
-9. ``php artisan queue:work``
+9. setup queue and mail
+
+10. ``php artisan queue:work``
+
+11. ``php artisan storage:link``
 
 Admin panel : 'http://{domain}/admin'
 
