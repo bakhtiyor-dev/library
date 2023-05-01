@@ -23,7 +23,10 @@
                         @endforeach
                     </div>
 
-                    {!! $books->links() !!}
+                    <div class="mt-6">
+                        {!! $books->links() !!}
+                    </div>
+
                 </div>
 
             </div>
