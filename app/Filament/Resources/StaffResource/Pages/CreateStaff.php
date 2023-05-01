@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\StaffResource\Pages;
 
 use App\Filament\Resources\StaffResource;
+use App\Notifications\StaffCreated;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
@@ -13,9 +14,10 @@ class CreateStaff extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        $staff = static::getModel()::create($data);
-        $staff->assignRole('staff');
-        return $staff;
+        $user = static::getModel()::create($data);
+        $user->assignRole('staff');
+        $user->notify(new StaffCreated());
+        return $user;
     }
 
 }
